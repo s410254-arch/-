@@ -1,0 +1,13 @@
+{
+  "name": "babycare-backend",
+  "version": "0.1.0",
+  "description": "Simple backend for BabyCare demo (ESP32 data receiver, storage, alerts)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

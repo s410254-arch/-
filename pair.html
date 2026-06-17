@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BabyCare 裝置配對</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="i18n.js"></script>
+  <style>.pair-card{max-width:720px;margin:48px auto;padding:20px;border-radius:14px;background:#fff;box-shadow:var(--shadow)}.device-list{display:flex;flex-direction:column;gap:10px}.device{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:var(--surface-soft)}</style>
+</head>
+<body>
+  <main>
+    <section class="pair-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h1 data-i18n="pair.title">ESP32 配對</h1>
+        <select data-i18n-lang id="localeSelect" style="border-radius:8px;padding:8px;height:36px">
+          <option value="zh-TW">中文（繁體）</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+        </select>
+      </div>
+      <p data-i18n="pair.scan">第一次使用請配對裝置。流程：手機 App ↔ Wi‑Fi ↔ ESP32</p>
+      <div id="status" data-i18n="pair.scan">搜尋裝置中...</div>
+      <div class="device-list" id="deviceList"></div>
+        <hr style="margin:18px 0" />
+        <h3>藍牙配對（Web Bluetooth）</h3>
+        <div>
+          <button id="ble-scan" style="padding:10px 14px;border-radius:10px;background:#4b83ff;color:#fff" data-i18n="pair.scan">搜尋藍牙裝置</button>
+          <div id="bleStatus" style="margin-top:8px;color:#334267"></div>
+        </div>
+      <div style="margin-top:12px"><a href="index.html">回到首頁</a></div>
+    </section>
+  </main>
+
+  <script>
+    async function scan() {
+      const status = document.getElementById('status');
+      status.textContent = '搜尋裝置中...';
+      const res = await fetch('/api/devices');
+      const j = await res.json();
+      if (j.ok && j.devices && j.devices.length) {
+        status.innerHTML = '搜尋完成';
+        const list = document.getElementById('deviceList');
+        list.innerHTML = '';
+        j.devices.forEach(d => {
+          const el = document.createElement('div');
+          el.className = 'device';
+          el.innerHTML = `<div>${d.name} ${d.found?'<span style="color:green">🟢 已找到</span>':''}</div>`;
+          const btn = document.createElement('button');
+          btn.textContent = '連線';
+          btn.addEventListener('click', async () => {
+            const r = await fetch('/api/pair', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({ deviceId: d.id }) });
+            const q = await r.json();
+            if (q.ok) alert('已配對 ' + d.name);
+          });
+          el.appendChild(btn);
+          list.appendChild(el);
+        });
+      } else {
+        status.textContent = '未找到裝置';
+      }
+    }
+
+    // run scan on load
+    scan();
+
+    // language selector
+    const localeSelect = document.getElementById('localeSelect');
+    if (localeSelect) {
+      localeSelect.addEventListener('change', (e) => {
+        I18N.setLocale(e.target.value);
+      });
+      localeSelect.value = I18N.getLocale();
+    }
+
+    // Web Bluetooth scan
+    const bleBtn = document.getElementById('ble-scan');
+    const bleStatus = document.getElementById('bleStatus');
+    if (bleBtn && navigator.bluetooth) {
+      bleBtn.addEventListener('click', async () => {
+        try {
+          bleStatus.textContent = '請選擇要配對的裝置...';
+          const device = await navigator.bluetooth.requestDevice({
+            filters: [{ namePrefix: 'BabyCare' }],
+            optionalServices: []
+          });
+          bleStatus.textContent = `已選擇：${device.name || device.id}`;
+          // 嘗試連線取得資訊
+          const server = await device.gatt.connect();
+          bleStatus.textContent = `已連線：${device.name || device.id}`;
+          // 儲存配對資訊到後端
+          await fetch('/api/pair', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({ deviceId: device.id }) });
+          alert('藍牙裝置已配對（前端示範）');
+          // 可在此讀取/訂閱特徵值
+        } catch (err) {
+          console.error(err);
+          bleStatus.textContent = '藍牙配對失敗或已取消';
+        }
+      });
+    } else if (bleStatus) {
+      bleStatus.textContent = '此瀏覽器不支援 Web Bluetooth（需 Chrome 或支援的瀏覽器，且須 HTTPS 或 localhost）。';
+    }
+  </script>
+</body>
+</html>

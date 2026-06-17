@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BabyCare 智慧嬰兒照護系統</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="i18n.js"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <section class="app-card header-card" id="home-section">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-mark">B</div>
+          <div>
+            <p class="brand-name">BabyCare</p>
+            <p class="brand-subtitle" data-i18n="nav.brandSubtitle">智慧嬰兒照護系統</p>
+          </div>
+        </div>
+        <div class="status-chip connected">
+          <span class="status-dot"></span>
+          <span data-i18n="status.connected">已連線</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-left:12px">
+          <a class="nav-link" href="login.html" data-i18n="login.title">登入</a>
+          <a class="nav-link" href="pair.html" data-i18n="pair.title">配對裝置</a>
+          <select data-i18n-lang id="localeSelect" style="border-radius:8px;padding:8px">
+            <option value="zh-TW">中文（繁體）</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="metric-card gauge-card" id="temp-card">
+          <div class="metric-head">
+            <div>
+                <p class="metric-label" data-i18n="metric.temp">溫度</p>
+                  <p class="metric-note" data-i18n="metric.temp.note">舒適範圍 22~26°C</p>
+            </div>
+            <div class="metric-icon temp-icon"></div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-ring" id="temp-ring"></div>
+            <div class="gauge-value">
+              <span>24.6</span>
+              <small>°C</small>
+            </div>
+          </div>
+        </article>
+
+        <article class="metric-card gauge-card" id="humidity-card">
+          <div class="metric-head">
+            <div>
+              <p class="metric-label" data-i18n="metric.humidity">濕度</p>
+              <p class="metric-note" data-i18n="metric.humidity.note">建議範圍 45~65%</p>
+            </div>
+            <div class="metric-icon humidity-icon"></div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-ring humidity-ring" id="humidity-ring"></div>
+            <div class="gauge-value">
+              <span>55</span>
+              <small>%</small>
+            </div>
+          </div>
+        </article>
+
+        <article class="metric-card status-overview-card">
+          <div class="status-card badge-card">
+            <div class="status-icon baby-icon"></div>
+            <div>
+              <p class="status-title" data-i18n="status.baby.title">嬰兒翻身狀態</p>
+                <p class="status-value normal" data-i18n="status.baby.normal">翻身正常</p>
+            </div>
+          </div>
+          <div class="status-card badge-card">
+            <div class="status-icon light-icon"></div>
+            <div>
+              <p class="status-title" data-i18n="status.light.title">房間燈光</p>
+                <p class="status-value" data-i18n="status.light.mode">柔光模式</p>
+            </div>
+          </div>
+          <div class="alert-panel small-alert">
+            <div>
+              <p class="alert-title" data-i18n="alert.title">警報提醒</p>
+              <p class="alert-message" data-i18n="alert.message">目前系統運作正常，未偵測異常事件。</p>
+            </div>
+            <button class="alert-action" data-i18n="alert.action">查看詳情</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="app-card chart-card" id="chart-section">
+      <div class="section-header">
+        <div>
+          <h2 data-i18n="chart.title">數據分析</h2>
+          <p class="subtext" data-i18n="chart.subtext">透過折線圖觀察環境與翻身趨勢</p>
+        </div>
+        <div class="chip" data-i18n="chart.chip">七日趨勢</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-mini-card">
+          <p data-i18n="stats.avgTemp">平均溫度</p>
+          <strong>24.3°C</strong>
+        </div>
+        <div class="stat-mini-card">
+          <p data-i18n="stats.avgHum">平均濕度</p>
+          <strong>53%</strong>
+        </div>
+        <div class="stat-mini-card">
+          <p data-i18n="stats.turnCount">翻身次數</p>
+          <strong>18 次</strong>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-block">
+          <p data-i18n="chart.tempBlock">溫度趨勢</p>
+          <div class="chart-placeholder chart-temp"></div>
+        </div>
+        <div class="chart-block">
+          <p data-i18n="chart.humBlock">濕度趨勢</p>
+          <div class="chart-placeholder chart-humidity"></div>
+        </div>
+        <div class="chart-block">
+          <p data-i18n="chart.rollBlock">翻身次數</p>
+          <div class="chart-placeholder chart-roll"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-card record-card" id="record-section">
+      <div class="section-header">
+        <div>
+          <h2 data-i18n="records.title">警報紀錄</h2>
+          <p class="subtext" data-i18n="records.subtext">時間軸顯示所有異常事件</p>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-time">09:45</span>
+          <div class="timeline-content warning">
+            <p class="timeline-title" data-i18n="timeline.turning.abnormal">翻身頻率異常</p>
+            <p data-i18n="timeline.turning.abnormal.msg">已偵測多次翻身，建議親自確認寶寶狀態。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-time">07:20</span>
+          <div class="timeline-content normal">
+            <p class="timeline-title" data-i18n="timeline.wifi.stable">Wi-Fi 連線穩定</p>
+            <p data-i18n="timeline.wifi.stable.msg">網路穩定，設備持續正常回傳資料。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-time">02:10</span>
+          <div class="timeline-content warning">
+            <p class="timeline-title" data-i18n="timeline.humidity.low">濕度過低</p>
+            <p data-i18n="timeline.humidity.low.msg">偵測到濕度低於建議範圍，已發送提醒。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-card settings-card" id="settings-section">
+      <div class="section-header">
+        <h2>系統設定</h2>
+      </div>
+      <form class="settings-form" id="settings-form">
+        <div class="form-row">
+          <label class="form-label" data-i18n="label.temp">溫度警報門檻</label>
+          <div class="inline-inputs">
+            <input type="number" id="temp-min" name="tempMin" class="form-input" value="18" min="0" step="0.1" />
+            <span class="sep">〜</span>
+            <input type="number" id="temp-max" name="tempMax" class="form-input" value="28" min="0" step="0.1" />
+            <span class="unit">°C</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label" data-i18n="label.hum">濕度警報門檻</label>
+          <div class="inline-inputs">
+            <input type="number" id="hum-min" name="humMin" class="form-input" value="40" min="0" step="1" />
+            <span class="sep">〜</span>
+            <input type="number" id="hum-max" name="humMax" class="form-input" value="70" min="0" step="1" />
+            <span class="unit">%</span>
+          </div>
+        </div>
+
+        <div class="form-row wifi-row">
+          <label class="form-label" data-i18n="label.wifi">Wi-Fi 連線</label>
+          <div class="wifi-inputs">
+            <input type="text" id="wifi-ssid" name="wifiSsid" class="form-input" placeholder="SSID" value="BabyRoom_5G" />
+            <input type="password" id="wifi-pass" name="wifiPass" class="form-input" placeholder="密碼（如需）" />
+            <button type="button" class="connect-btn" id="wifi-connect">連線</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label" data-i18n="label.notify">通知方式</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="notifyPush" checked /> 推播</label>
+            <label><input type="checkbox" name="notifyEmail" checked /> Email</label>
+            <label><input type="checkbox" name="notifySound" checked /> 聲音</label>
+          </div>
+        </div>
+
+        <div class="form-row actions-row">
+          <button type="submit" class="save-btn" data-i18n="btn.save">儲存設定</button>
+          <button type="button" class="save-btn secondary" id="reset-defaults" data-i18n="btn.reset">重設預設</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button type="button" class="nav-item active" data-target="home-section" data-i18n="nav.home">首頁</button>
+    <button type="button" class="nav-item" data-target="chart-section" data-i18n="nav.data">數據分析</button>
+    <button type="button" class="nav-item" data-target="record-section" data-i18n="nav.records">警報紀錄</button>
+    <button type="button" class="nav-item" data-target="settings-section" data-i18n="nav.settings">系統設定</button>
+  </nav>
+
+  <script>
+    const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+    const sectionIds = ['home-section', 'chart-section', 'record-section', 'settings-section'];
+
+    function selectNav(index) {
+      navItems.forEach((btn, idx) => btn.classList.toggle('active', idx === index));
+    }
+
+    navItems.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target || sectionIds[index];
+        const section = document.getElementById(targetId);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          selectNav(index);
+        }
+      });
+    });
+
+    document.querySelector('.alert-action').addEventListener('click', () => {
+      const recordSection = document.getElementById('record-section');
+      if (recordSection) {
+        recordSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        selectNav(2);
+      }
+      alert('已切換到警報紀錄，請查看最近異常事件。');
+    });
+
+    const tempSpan = document.querySelector('#temp-card .gauge-value span');
+    const humiditySpan = document.querySelector('#humidity-card .gauge-value span');
+    const rollSpan = document.querySelector('#chart-section .stat-mini-card:nth-child(3) strong');
+    const tempRing = document.getElementById('temp-ring');
+    const humidityRing = document.getElementById('humidity-ring');
+
+    function randomValue(min, max, precision = 0) {
+      const factor = Math.pow(10, precision);
+      return Math.round((Math.random() * (max - min) + min) * factor) / factor;
+    }
+
+    function updateMetrics() {
+      const temp = randomValue(22.4, 25.8, 1);
+      const humidity = randomValue(48, 62, 0);
+      const roll = randomValue(14, 20, 0);
+      if (tempSpan) tempSpan.textContent = temp;
+      if (humiditySpan) humiditySpan.textContent = humidity;
+      if (rollSpan) rollSpan.textContent = `${roll} 次`;
+
+      if (tempRing) {
+        const percent = Math.min(100, Math.max(0, ((temp - 18) / 12) * 100));
+        tempRing.style.background = `conic-gradient(#4b83ff ${percent}%, rgba(75, 131, 255, 0.14) 0%)`;
+      }
+      if (humidityRing) {
+        const percent = Math.min(100, Math.max(0, ((humidity - 40) / 30) * 100));
+        humidityRing.style.background = `conic-gradient(#3bb7e0 ${percent}%, rgba(59, 183, 224, 0.14) 0%)`;
+      }
+    }
+
+    updateMetrics();
+    setInterval(updateMetrics, 5000);
+    // Settings form handlers
+    const settingsForm = document.getElementById('settings-form');
+    const wifiConnectBtn = document.getElementById('wifi-connect');
+    const resetBtn = document.getElementById('reset-defaults');
+
+    if (settingsForm) {
+      settingsForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const tempMin = document.getElementById('temp-min').value;
+        const tempMax = document.getElementById('temp-max').value;
+        const humMin = document.getElementById('hum-min').value;
+        const humMax = document.getElementById('hum-max').value;
+        const notifyPush = settingsForm.querySelector('[name=notifyPush]').checked;
+        const notifyEmail = settingsForm.querySelector('[name=notifyEmail]').checked;
+        const notifySound = settingsForm.querySelector('[name=notifySound]').checked;
+        alert(`設定已儲存\n溫度: ${tempMin}〜${tempMax}°C\n濕度: ${humMin}〜${humMax}%\n通知: ${notifyPush ? '推播 ' : ''}${notifyEmail ? 'Email ' : ''}${notifySound ? '聲音' : ''}`);
+      });
+    }
+
+    if (wifiConnectBtn) {
+      wifiConnectBtn.addEventListener('click', () => {
+        const ssid = document.getElementById('wifi-ssid').value;
+        alert(`嘗試連線到 ${ssid}，若需要密碼請確認後再試。`);
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        document.getElementById('temp-min').value = 18;
+        document.getElementById('temp-max').value = 28;
+        document.getElementById('hum-min').value = 40;
+        document.getElementById('hum-max').value = 70;
+        settingsForm.querySelector('[name=notifyPush]').checked = true;
+        settingsForm.querySelector('[name=notifyEmail]').checked = true;
+        settingsForm.querySelector('[name=notifySound]').checked = true;
+        alert('已重設為預設值。');
+      });
+    }
+
+    // Alerts poller + Web Notification demo
+    let lastAlertId = null;
+    async function pollAlerts() {
+      try {
+        const res = await fetch('/api/alerts');
+        const j = await res.json();
+        if (j.ok && j.alerts && j.alerts.length) {
+          const latest = j.alerts[j.alerts.length-1];
+          if (latest.id !== lastAlertId) {
+            lastAlertId = latest.id;
+            // show browser notification
+            if (window.Notification && Notification.permission === 'granted') {
+              new Notification('⚠️ BabyCare 警報', { body: `${latest.alert || '警報'} • ${latest.timestamp}` });
+            }
+            // also show in-page alert area
+            const alertPanel = document.querySelector('.alert-panel .alert-message');
+            if (alertPanel) alertPanel.textContent = `最近警報：${latest.alert || '異常'}（${latest.timestamp}）`;
+          }
+        }
+      } catch (e) {
+        console.error('pollAlerts', e);
+      }
+    }
+
+    if (window.Notification) {
+      if (Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    }
+    setInterval(pollAlerts, 10000);
+    pollAlerts();
+
+    // locale selector
+    const localeSelect = document.getElementById('localeSelect');
+    if (localeSelect) {
+      localeSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        I18N.setLocale(val);
+      });
+      // apply initial value
+      localeSelect.value = I18N.getLocale();
+    }
+  </script>
+</body>
+</html>
