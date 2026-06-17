@@ -1,0 +1,10 @@
+# 忽略以下文件不上傳到 Google Cloud
+node_modules/
+.git/
+.gitignore
+README.md
+DEPLOYMENT.md
+DEPLOY_PUBLIC.md
+*.md
+.env.local
+db.json
