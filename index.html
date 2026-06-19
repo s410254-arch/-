@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script src="i18n.js"></script>
+  <script src="config.js"></script>
 </head>
 <body>
   <main class="app-shell">
@@ -328,7 +329,7 @@
     let lastAlertId = null;
     async function pollAlerts() {
       try {
-        const res = await fetch('/api/alerts');
+        const res = await fetch(`${API_BASE}/api/alerts`);
         const j = await res.json();
         if (j.ok && j.alerts && j.alerts.length) {
           const latest = j.alerts[j.alerts.length-1];

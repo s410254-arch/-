@@ -6,6 +6,7 @@
   <title>BabyCare 登入</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="i18n.js"></script>
+  <script src="config.js"></script>
   <style>
     .login-card { max-width:420px; margin:80px auto; padding:24px; border-radius:16px; background:#fff; box-shadow:var(--shadow);} 
     .login-card h1{margin:0 0 12px}
@@ -46,7 +47,7 @@
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const res = await fetch('/api/login', { method: 'POST', headers: { 'content-type':'application/json' }, body: JSON.stringify({ email, password }) });
+      const res = await fetch(`${API_BASE}/api/login`, { method: 'POST', headers: { 'content-type':'application/json' }, body: JSON.stringify({ email, password }) });
       const j = await res.json();
       if (j.ok) {
         alert('登入成功');
