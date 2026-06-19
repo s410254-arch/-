@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <script src="i18n.js"></script>
   <style>.pair-card{max-width:720px;margin:48px auto;padding:20px;border-radius:14px;background:#fff;box-shadow:var(--shadow)}.device-list{display:flex;flex-direction:column;gap:10px}.device{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:var(--surface-soft)}</style>
+  <script src="config.js"></script>
 </head>
 <body>
   <main>
@@ -37,7 +38,7 @@
     async function scan() {
       const status = document.getElementById('status');
       status.textContent = '搜尋裝置中...';
-      const res = await fetch('/api/devices');
+      const res = await fetch(`${API_BASE}/api/devices`);
       const j = await res.json();
       if (j.ok && j.devices && j.devices.length) {
         status.innerHTML = '搜尋完成';
@@ -50,7 +51,7 @@
           const btn = document.createElement('button');
           btn.textContent = '連線';
           btn.addEventListener('click', async () => {
-            const r = await fetch('/api/pair', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({ deviceId: d.id }) });
+            const r = await fetch(`${API_BASE}/api/pair`, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({ deviceId: d.id }) });
             const q = await r.json();
             if (q.ok) alert('已配對 ' + d.name);
           });
@@ -90,7 +91,7 @@
           const server = await device.gatt.connect();
           bleStatus.textContent = `已連線：${device.name || device.id}`;
           // 儲存配對資訊到後端
-          await fetch('/api/pair', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({ deviceId: device.id }) });
+          await fetch(`${API_BASE}/api/pair`, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({ deviceId: device.id }) });
           alert('藍牙裝置已配對（前端示範）');
           // 可在此讀取/訂閱特徵值
         } catch (err) {
