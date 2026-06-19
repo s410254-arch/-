@@ -21,6 +21,13 @@ function writeDB(obj) {
 const app = express();
 app.use(cors());
 app.use(express.json());
+// Serve a dynamic config script that can be overridden by the environment.
+app.get('/config.js', (req, res) => {
+  const apiBase = process.env.API_BASE || '';
+  res.type('application/javascript');
+  res.send(`window.__API_BASE__ = ${JSON.stringify(apiBase)};`);
+});
+
 app.use(express.static(__dirname));
 
 app.post('/api/login', (req, res) => {
